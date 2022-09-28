@@ -1,6 +1,8 @@
 from random import randint
+from copy import deepcopy
+from time import sleep
 
-SIZE = (10, 10)
+SIZE = (32, 32)
 GRID = []
 
 DIRECTIONS = ((0, -1), (0, 1), (-1, 0), (1, 0))
@@ -8,8 +10,10 @@ DIRECTIONS = ((0, -1), (0, 1), (-1, 0), (1, 0))
 class Node:
 	position = (0, 0)
 	wall = False
+	path = False
 	explored = False
 	exploredFrom = None
+	special = -1 # -1 for regular, 0 for start, 1 for finish
 
 	def __init__(self, position, wall = False) -> None:
 		self.wall = wall
@@ -28,7 +32,7 @@ def in_bounds(x, y):
 		return False
 	return True
 
-def bfs(start, end):
+def bfs(start, end, inplace = False):
 	if not in_bounds(start[0], start[1]) or not in_bounds(start[0], start[1]):
 		print("Endpoint not in bounds!")
 		return None
@@ -37,7 +41,12 @@ def bfs(start, end):
 		print("No pathfinding necessary; start point is finish point")
 		return None
 
-	grid = GRID.copy() # Do not operate in-place
+	grid = GRID if inplace else deepcopy(GRID)
+	
+	# Mark as start and finish
+	grid[start[0]][start[1]].special = 0
+	grid[end[0]][end[1]].special = 1
+	
 	explored = [grid[start[0]][start[1]]] # Start has been explored
 	while (grid[end[0]][end[1]] not in explored):
 		found_new_neighbor = False
@@ -66,6 +75,8 @@ def bfs(start, end):
 		current = current.exploredFrom
 	path.append(grid[start[0]][start[1]])
 	path.reverse()
+	for i in range(len(path)):
+		path[i].path = True
 	return path
 
 def show_raw():
@@ -91,12 +102,8 @@ def show(path):
 
 # Main execution
 init_grid(random_walls=True)
-show_raw()
 
 start = (randint(0, SIZE[0] - 1), randint(0, SIZE[1] - 1))
-finish = (randint(0, SIZE[0] - 1), randint(0, SIZE[1] - 1))
+end = (randint(0, SIZE[0] - 1), randint(0, SIZE[1] - 1))
 
-path = bfs(start, finish)
-
-if path:
-	show(path)
+path = bfs(start, end, inplace=True)

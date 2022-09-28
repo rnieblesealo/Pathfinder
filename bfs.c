@@ -1,53 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define GRID_SIZE 16
+#define SIZE_X 10
+#define SIZE_Y 10
 
-typedef struct Node {
-	struct Node* exploredFrom;
-	int position[2];
+typedef struct Node{
+	int* position;
+	int wall;
 	int explored;
+	struct Node* exploredFrom;
 } Node;
 
-Node* new_Node(int x, int y){
+Node* new_Node(int x_pos, int y_pos, int wall){
+	// Position and nodes go on heap
 	Node* n = (Node*)malloc(sizeof(Node));
 	
-	n->position[0] = x;
-	n->position[1] = y;
-
-	return n; 
+	n->position = (int*)malloc(2 * sizeof(int));
+	n->position[0] = x_pos;
+	n->position[1] = y_pos;
+	
+	n->wall = wall;
+	n->explored = 0;
+	n->exploredFrom = NULL;
+	
+	return n;
 }
 
-int contains(Node*(grid)[GRID_SIZE], Node element){
-        for (int y = 0; y < GRID_SIZE; ++y){
-                for (int x = 0; x < GRID_SIZE; ++x){
-	        	if (grid[y][x] == element)
-				return 1;        
-		}
-        }
-	return 0;
-}
-
-Node* bfs(Node(*grid)[GRID_SIZE], Node* start, Node* finish){
-	Node** explored = (Node**)malloc(GRID_SIZE * GRID_SIZE * sizeof(Node*));
-	while (){
-		
-	}
-}
 
 int main(){
-	// Allocate & populate grid
-	Node(*NODES)[16] = (Node(*)[16])malloc(GRID_SIZE * GRID_SIZE * sizeof(Node));
-	for (int y = 0; y < GRID_SIZE; ++y){
-		for (int x = 0; x < GRID_SIZE; ++x){
-			NODES[y][x].position[0] = x;
-			NODES[y][x].position[1] = y; 
-			printf("(%d, %d) ", NODES[y][x].position[0], NODES[y][x].position[1]);		
-		}
-		printf("\n");
-	}
+	Node(*GRID)[SIZE_X] = (Node(*)[SIZE_X])malloc(SIZE_X * SIZE_Y * sizeof(Node));
 	
-	printf("%d", contains(NODES, NODES[0][0]);
+	GRID[0][0] = new_Node(0, 0, 0);
 
 	return 0;
 }
