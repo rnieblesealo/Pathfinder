@@ -1,2 +1,5 @@
 *.out
-!__pycache__/
+*.swp
+*.dSYM/
+__pycache__/
+.vscode/

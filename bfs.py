@@ -33,7 +33,7 @@ def in_bounds(x, y):
 	return True
 
 def bfs(start, end, inplace = False):
-	if not in_bounds(start[0], start[1]) or not in_bounds(start[0], start[1]):
+	if not in_bounds(start[0], start[1]) or not in_bounds(end[0], end[1]):
 		print("Endpoint not in bounds!")
 		return None
 	
