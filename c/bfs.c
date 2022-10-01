@@ -1,5 +1,6 @@
 /* BUGS:
-	- One more node is appended than the entirety of nodes that there should be in the path; can this be a data structure issue?
+	! One more node is appended than the entirety of nodes that there should be in the path; can this be a data structure issue?
+	! As of right now program does not free used memory; this is a fatal issue, as this particular implementation is memory-heavy
 */
 
 #include <stdio.h>
@@ -15,9 +16,8 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
-#define SIZE_X 10
-#define SIZE_Y 10
-#define MAX_PATH_SIZE 128
+#define SIZE_X 16
+#define SIZE_Y 16
 
 typedef struct Node{
 	int* position;
@@ -236,15 +236,8 @@ NodeListItem* BFS(Node*** grid, int* start, int* end){
 	// Once exploring is done, we generate a path of nodes, append the end node to it
 	NodeListItem* path = NULL;
 	Append(&path, grid[end[1]][end[0]]);
-
-	// TODO This part seems broken
-	// If exploring is done and there are no more than four neighbors; it means we have reached the destination. Therefore, a neighbor of start is the end node. Return the end node only.
-	if (Count(&exploredNodes) <= 4){
-		printf("Done pathfinding! Appended end node to path only, as it was adjacent to start!\n");
-		return path;
-	}
 	
-	// Otherwise traceback each explored tile's exploredFrom starting at end to figure out path
+	// Traceback each explored tile's exploredFrom starting at end to figure out path
 	Node* current = Index(&path, 0);
 	while (current != grid[start[1]][start[0]]){
 		Append(&path, current);
