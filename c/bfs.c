@@ -1,3 +1,7 @@
+/* BUGS:
+	- One more node is appended than the entirety of nodes that there should be in the path; can this be a data structure issue?
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
